@@ -1,9 +1,9 @@
 import React from 'react'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 
-function Button({ title, onPress, children }) {
+function Button({ title, onPress, color, children }) {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={{ backgroundColor: color }}>
       <Text>{title}</Text>
       {children}
     </TouchableOpacity>
