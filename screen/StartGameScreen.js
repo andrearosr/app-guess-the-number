@@ -5,11 +5,45 @@ import Button from '../components/Button';
 import Input from '../components/Input'
 import Colors, { globalStyles } from '../constants/Colors';
 
-function StartGameScreen() {
+function StartGameScreen({ onStartGame }) {
   const [enteredValue, setEnteredValue] = useState('');
+  const [confirmed, setConfirmed] = useState(false);
+  const [selectedNumber, setSelectedNumber] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChangeText = (text) => {
     setEnteredValue(text.replace(/[^0-9]/g, ''))
+  }
+
+  const handleReset = () => {
+    setEnteredValue('');
+    setConfirmed(false);
+    setSelectedNumber('');
+    setErrorMessage('');
+  }
+
+  const handleConfirm = () => {
+    const chosenNumber = parseInt(enteredValue)
+    if (chosenNumber <= 0) {
+      setErrorMessage('El número debe estar entre 1 y 99')
+      return;
+    };
+
+    setConfirmed(true);
+    setSelectedNumber(enteredValue);
+    setEnteredValue('');
+    setErrorMessage('')
+  }
+
+  const handleStartGame = () => onStartGame(selectedNumber)
+
+  let errorOutput;
+  if (errorMessage) {
+    errorOutput = (
+      <Card>
+        <Text>{errorMessage}</Text>
+      </Card>
+    )
   }
 
   return (
@@ -28,12 +62,19 @@ function StartGameScreen() {
             onChangeText={handleChangeText}
           />
           <View style={styles.buttonContainer}>
-            <Button color={Colors.accent} title="Limpiar" onPress={() => { }} />
-            <Button color={Colors.primary} title="Confirmar" onPress={() => { }}>
+            <Button color={Colors.accent} title="Limpiar" onPress={handleReset} />
+            <Button color={Colors.primary} title="Confirmar" onPress={handleConfirm}>
               <Text>👏</Text>
             </Button>
           </View>
         </Card>
+        {confirmed ? (
+          <Card>
+            <Text>Numero elegido: {selectedNumber}</Text>
+            <Button title="COMENZAR" onPress={handleStartGame} color={Colors.accent} />
+          </Card>
+         ) : null}
+        {errorOutput}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -54,6 +95,7 @@ const styles = StyleSheet.create({
     width: 300,
     maxWidth: '80%',
     padding: 20,
+    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
