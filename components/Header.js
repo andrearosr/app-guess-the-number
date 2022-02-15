@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: '#50514f',
     fontSize: 22,
+    fontFamily: 'Lato-Bold'
   },
 })
 
