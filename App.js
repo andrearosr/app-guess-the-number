@@ -1,12 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 import Header from './components/Header';
 import StartGameScreen from './screen/StartGameScreen';
 import GameScreen from './screen/GameScreen';
-import { useState } from 'react';
 
 export default function App() {
+  const [loaded] = useFonts({
+    Lato: require('./assets/fonts/Lato-Regular.ttf'),
+    'Lato-Bold': require('./assets/fonts/Lato-Bold.ttf'),
+  })
   const [userNumber, setUserNumber] = useState()
+
+  if (!loaded) return <AppLoading />
 
   const handleStartGame = selectedNumber => {
     setUserNumber(selectedNumber)
