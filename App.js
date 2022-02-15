@@ -6,11 +6,12 @@ import AppLoading from 'expo-app-loading';
 import Header from './components/Header';
 import StartGameScreen from './screen/StartGameScreen';
 import GameScreen from './screen/GameScreen';
+import Typography from './constants/Typography';
 
 export default function App() {
   const [loaded] = useFonts({
     Lato: require('./assets/fonts/Lato-Regular.ttf'),
-    'Lato-Bold': require('./assets/fonts/Lato-Bold.ttf'),
+    [Typography.titleFont]: require('./assets/fonts/Lato-Bold.ttf'),
   })
   const [userNumber, setUserNumber] = useState()
 
