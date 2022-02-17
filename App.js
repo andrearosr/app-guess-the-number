@@ -14,6 +14,7 @@ export default function App() {
     [Typography.titleFont]: require('./assets/fonts/Lato-Bold.ttf'),
   })
   const [userNumber, setUserNumber] = useState()
+  const [userRounds, setUserRounds] = useState()
 
   if (!loaded) return <AppLoading />
 
@@ -21,10 +22,25 @@ export default function App() {
     setUserNumber(selectedNumber)
   }
 
+  const handleGameOver = rounds => {
+    console.log('rounds', rounds)
+    setUserRounds(rounds);
+  }
+
   let content = <StartGameScreen onStartGame={handleStartGame} />
 
   if (userNumber) {
-    content = <GameScreen userNumber={userNumber} />
+    content = <GameScreen userNumber={userNumber} onGameOver={handleGameOver} />
+  }
+
+  if (userRounds) {
+    content = (
+      <View>
+        <Text>Game over screen</Text>
+        <Text>{userRounds} rondas</Text>
+        <Text>El número era: {userNumber}</Text>
+      </View>
+    )
   }
 
   return (

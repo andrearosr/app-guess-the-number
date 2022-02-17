@@ -41,7 +41,7 @@ function StartGameScreen({ onStartGame }) {
     };
 
     setConfirmed(true);
-    setSelectedNumber(enteredValue);
+    setSelectedNumber(chosenNumber);
     setEnteredValue('');
     setErrorMessage('')
   }
