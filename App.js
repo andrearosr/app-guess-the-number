@@ -7,6 +7,7 @@ import Header from './components/Header';
 import StartGameScreen from './screen/StartGameScreen';
 import GameScreen from './screen/GameScreen';
 import Typography from './constants/Typography';
+import Button from './components/Button';
 
 export default function App() {
   const [loaded] = useFonts({
@@ -27,6 +28,11 @@ export default function App() {
     setUserRounds(rounds);
   }
 
+  const handleResetGame = () => {
+    setUserNumber();
+    setUserRounds();
+  }
+
   let content = <StartGameScreen onStartGame={handleStartGame} />
 
   if (userNumber) {
@@ -39,6 +45,11 @@ export default function App() {
         <Text>Game over screen</Text>
         <Text>{userRounds} rondas</Text>
         <Text>El número era: {userNumber}</Text>
+        <Button onPress={handleResetGame}>
+          <Text>
+            Volver a jugar
+          </Text>
+        </Button>
       </View>
     )
   }
