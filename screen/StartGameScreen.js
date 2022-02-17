@@ -1,5 +1,14 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Dimensions,
+  useWindowDimensions,
+} from 'react-native'
 import Card from '../components/Card'
 import Button from '../components/Button';
 import Input from '../components/Input'
@@ -10,6 +19,8 @@ function StartGameScreen({ onStartGame }) {
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const { width, height } = useWindowDimensions();
+  const isPortrait = height >= width;
 
   const handleChangeText = (text) => {
     setEnteredValue(text.replace(/[^0-9]/g, ''))
@@ -37,6 +48,7 @@ function StartGameScreen({ onStartGame }) {
 
   const handleStartGame = () => onStartGame(selectedNumber)
 
+
   let errorOutput;
   if (errorMessage) {
     errorOutput = (
@@ -47,40 +59,53 @@ function StartGameScreen({ onStartGame }) {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.screen}>
-        <Text style={styles.title}>Comenzar Juego</Text>
-        <Card style={styles.inputContainer}>
-          <Text>Elija un número</Text>
-          <Input
-            blurOnSubmit
-            autoCapitalization="none"
-            autoCorrect={false}
-            keyboardType="numeric"
-            maxLength={2}
-            value={enteredValue}
-            onChangeText={handleChangeText}
-          />
-          <View style={styles.buttonContainer}>
-            <Button color={Colors.accent} title="Limpiar" onPress={handleReset} />
-            <Button color={Colors.primary} title="Confirmar" onPress={handleConfirm}>
-              <Text>👏</Text>
-            </Button>
-          </View>
-        </Card>
-        {confirmed ? (
-          <Card>
-            <Text>Numero elegido: {selectedNumber}</Text>
-            <Button title="COMENZAR" onPress={handleStartGame} color={Colors.accent} />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.screen}>
+          <Text style={styles.title}>Comenzar Juego</Text>
+          <Card style={[
+            styles.inputContainer,
+            isPortrait ? styles.inputContainerPortrait : styles.inputContainerLandscape
+          ]}>
+            <Text>Elija un número</Text>
+            <Input
+              blurOnSubmit
+              autoCapitalization="none"
+              autoCorrect={false}
+              keyboardType="numeric"
+              maxLength={2}
+              value={enteredValue}
+              onChangeText={handleChangeText}
+            />
+            <View style={styles.buttonContainer}>
+              <Button color={Colors.accent} title="Limpiar" onPress={handleReset} />
+              <Button color={Colors.primary} title="Confirmar" onPress={handleConfirm}>
+                <Text>👏</Text>
+              </Button>
+            </View>
           </Card>
-         ) : null}
-        {errorOutput}
-      </View>
-    </TouchableWithoutFeedback>
+          {confirmed ? (
+            <Card>
+              <Text>Numero elegido: {selectedNumber}</Text>
+              <Button title="COMENZAR" onPress={handleStartGame} color={Colors.accent} />
+            </Card>
+          ) : null}
+          {errorOutput}
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   )
 }
 
+const { width } = Dimensions.get('window')
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   screen: {
     flex: 1,
     padding: 10,
@@ -92,10 +117,16 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     ...globalStyles.centered,
-    width: 300,
+    padding: width >= 400 ? 20 : 10,
+    marginBottom: width >= 400 ? 20 : 10,
+  },
+  inputContainerPortrait: {
     maxWidth: '80%',
-    padding: 20,
-    marginBottom: 20,
+    width: 400,
+  },
+  inputContainerLandscape: {
+    maxWidth: '90%',
+    width: 800,
   },
   buttonContainer: {
     flexDirection: 'row',

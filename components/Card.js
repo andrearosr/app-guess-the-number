@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 
 function Card({ style, children }) {
   return (
-    <View style={{ ...styles.cardContainer, ...style }}>
+    <View style={[styles.cardContainer, style]}>
       {children}
     </View>
   )
